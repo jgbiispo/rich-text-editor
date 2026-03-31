@@ -1,123 +1,43 @@
-// src/pages/Login.tsx
-import { useState } from "react";
 import "./css/Login.css";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import { FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const { t } = useTranslation("common");
-  const { signInWithGoogle, createUserWithEmail, signInWithEmail } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [coPassword, setCoPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [signiUp, setSignUp] = useState(false);
-
-  const handleCreateUser = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-
-    try {
-      await createUserWithEmail({ email, password, coPassword });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-
-    try {
-      await signInWithEmail({ email, password });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { signInWithGoogle } = useAuth();
 
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1>{t("login.welcome")} Richly</h1>
-        <p className="subtitle">
-          {signiUp ? t("login.newUser") : t("login.title")}
-        </p>
+        <div className="login-logo">
+          <h1>Richly</h1>
+        </div>
 
-        {error && <div className="error-message">{error}</div>}
+        <div className="login-content">
+          <h2 className="login-title">{t("login.welcome")}</h2>
+          <p className="login-subtitle">
+            {t("login.description_google") || "Seu editor de texto rico e minimalista"}
+          </p>
 
-        <form onSubmit={signiUp ? handleCreateUser : handleEmailLogin}>
-          <div className="form-group">
-            <label htmlFor="email">{t("login.email")}</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">{t("login.password")}</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          {signiUp ? (
-            <>
-              <div className="form-group">
-                <label htmlFor="confirm-password">{t("login.confirm")}</label>
-                <input
-                  type="password"
-                  id="confirm-password"
-                  value={coPassword}
-                  onChange={(e) => setCoPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <button type="submit" disabled={isLoading}>
-                {isLoading ? t("login.creating_account") : t("login.sign_up")}
-              </button>
-            </>
-          ) : (
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? t("login.logging_in") : t("login.sign_in")}
-            </button>
-          )}
-        </form>
-
-        <div className="separator">{t("login.or")}</div>
-
-        <button
-          className="google-btn"
-          onClick={signInWithGoogle}
-          disabled={isLoading}
-        >
-          {t("login.login_with")} Google
-        </button>
-
-        <div className="signup">
-          {!signiUp ? t("login.newRichly") : t("login.oldRichly")}{" "}
-          <span
-            onClick={() => {
-              setSignUp(!signiUp);
-            }}
-            className="btn_signup"
+          <button
+            className="google-btn"
+            onClick={signInWithGoogle}
           >
-            {!signiUp ? t("login.sign_up") : t("login.sign_in")}
-          </span>
+            <FaGoogle className="google-icon" />
+            <span>{t("login.continue_with_google") || "Continuar com Google"}</span>
+          </button>
+
+          <p className="login-footer">
+            {t("login.terms_text") || "Ao continuar, você concorda com nossos"}{" "}
+            <a href="/terms" target="_blank" rel="noopener noreferrer">
+              {t("login.terms") || "Termos"}
+            </a>{" "}
+            {t("login.and") || "e"}{" "}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer">
+              {t("login.privacy") || "Privacidade"}
+            </a>
+          </p>
         </div>
       </div>
     </div>

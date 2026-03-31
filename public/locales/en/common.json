@@ -21,7 +21,7 @@
     "message": "Faça login no canto superior direito da tela, diretametne pelo Google"
   },
   "login": {
-    "welcome": "Welcome to",
+    "welcome": "Welcome to Richly",
     "title": "Log in to your account to continue",
     "newUser": "Create your accoutnt to continue",
     "email": "Email",
@@ -34,7 +34,13 @@
     "login_with": "login with ",
     "newRichly": "New to Richly?",
     "oldRichly": "Already have a Richly account?",
-    "confirm": "Confirm password"
+    "confirm": "Confirm password",
+    "description_google": "Your rich and minimalist text editor",
+    "continue_with_google": "Continue with Google",
+    "terms_text": "By continuing, you agree to our",
+    "terms": "Terms",
+    "and": "and",
+    "privacy": "Privacy"
   },
   "history": {
     "title": "Revision History",
