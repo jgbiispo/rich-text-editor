@@ -9,6 +9,7 @@ import {
   exportAsHTML,
   exportAsText,
   exportAsMarkdown,
+  ExportFormat,
 } from "../utils/exporters";
 
 import {
@@ -77,8 +78,7 @@ export default function Toolbar({
     editorRef.current.innerHTML = history.stack[history.pointer + 1];
   };
 
-  const handleExport = (format: any) => {
-    console.log("html");
+  const handleExport = (format: ExportFormat) => {
     try {
       if (!editorRef.current) return;
       const content = sanitizeHTML(editorRef.current.innerHTML);
@@ -86,15 +86,12 @@ export default function Toolbar({
 
       switch (format) {
         case "html":
-          console.log("html");
           exported = exportAsHTML(content);
           break;
         case "md":
-          console.log("md");
           exported = exportAsMarkdown(content);
           break;
         case "txt":
-          console.log("txt");
           exported = exportAsText(content);
           break;
         default:

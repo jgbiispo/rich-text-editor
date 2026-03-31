@@ -14,7 +14,6 @@ import {
   getNotes,
 } from "./services/notesService";
 import "./theme.css";
-import "firebase/firestore";
 import "./App.css";
 import "./components/css/LoginButton.css";
 
@@ -55,8 +54,8 @@ const App = () => {
 
     const loadNotes = async () => {
       try {
-        if (user?.email) {
-          const cloudNotes = await getNotes(user.uid);
+        if (user) {
+          const cloudNotes = await getNotes(user.id);
 
           const noteWithDate = cloudNotes.map((note) => ({
             ...note,
@@ -72,18 +71,26 @@ const App = () => {
           const localNotes = localStorage.getItem("notes");
           const parsedNotes = localNotes ? JSON.parse(localNotes) : [];
 
-          const migratedNotes = parsedNotes.map((note: any) => ({
+          interface LocalNoteRaw {
+            id?: string;
+            title?: string;
+            content?: string;
+            updatedAt?: string | Date;
+            history?: Array<{ content: string; timestamp: string | Date }>;
+          }
+
+          const migratedNotes = parsedNotes.map((note: LocalNoteRaw) => ({
             ...note,
-            updatedAt: new Date(note.updatedAt),
-            history: (note.history || []).map((entry: any) => ({
+            updatedAt: new Date(note.updatedAt ?? Date.now()),
+            history: (note.history || []).map((entry) => ({
               content: entry.content,
               timestamp: new Date(entry.timestamp),
             })),
           }));
 
           const validNotes = migratedNotes.filter(
-            (note: Note) =>
-              note.id && note.title && note.content && note.updatedAt
+            (note: Partial<Note>): note is Note =>
+              !!(note.id && note.title && note.content && note.updatedAt)
           );
 
           if (isMounted) {
@@ -120,9 +127,9 @@ const App = () => {
         history: [],
       };
 
-      const createdNote = await createNote(user.uid, newNote);
-      setNotes((prev) => [{ ...newNote, id: createdNote.id }, ...prev]);
-      setCurrentNoteId(createdNote.id);
+      const docRef = await createNote(user.id, newNote);
+      setNotes((prev) => [{ ...newNote, id: docRef.id }, ...prev]);
+      setCurrentNoteId(docRef.id);
     } catch (error) {
       console.error("Failed to create note:", error);
     }
@@ -153,7 +160,7 @@ const App = () => {
 
               // Atualizar servidor (se logado)
               if (user) {
-                updateNoteService(user.uid, noteId, updatedNote).catch(
+                updateNoteService(user.id, noteId, updatedNote).catch(
                   (error) =>
                     console.error("Erro ao atualizar no servidor:", error)
                 );
@@ -174,20 +181,22 @@ const App = () => {
   const deleteNote = useCallback(
     async (noteId: string) => {
       try {
-        setNotes((prev) => prev.filter((n) => n.id !== noteId));
-
         if (user) {
-          await deleteNoteService(user.uid, noteId);
+          await deleteNoteService(user.id, noteId);
         }
 
-        if (noteId === currentNoteId) {
-          setCurrentNoteId(notes[0]?.id || null);
-        }
+        setNotes((prev) => {
+          const remaining = prev.filter((n) => n.id !== noteId);
+          if (noteId === currentNoteId) {
+            setCurrentNoteId(remaining[0]?.id || null);
+          }
+          return remaining;
+        });
       } catch (error) {
         console.error("Failed to delete note:", error);
       }
     },
-    [currentNoteId, user, notes]
+    [currentNoteId, user]
   );
 
   const currentNote = notes.find((note) => note.id === currentNoteId) || null;

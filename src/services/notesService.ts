@@ -1,38 +1,47 @@
-import { Note } from "../types/note";
-import { analytics, db } from "../firebase/config";
-import {
-  collection,
-  doc,
-  addDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp,
-} from "firebase/firestore";
-import { logEvent } from "firebase/analytics";
+import { supabase } from '../supabase/client';
+import { Note } from '../types/note';
 
-export const createNote = async (userId: string, noteData: Note) => {
-  const userNotesRef = collection(db, "notes", userId, "userNotes");
-  logEvent(analytics, "notes_created", { noteId: noteData.id });
-  return await addDoc(userNotesRef, {
-    ...noteData,
-    updatedAt: serverTimestamp(),
-  });
+export const createNote = async (userId: string, noteData: Omit<Note, 'id'>) => {
+  const { data, error } = await supabase
+    .from('notes')
+    .insert({
+      user_id: userId,
+      title: noteData.title,
+      content: noteData.content,
+      history: noteData.history.map((entry) => ({
+        timestamp: entry.timestamp.toISOString(),
+        content: entry.content,
+      })),
+      updated_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return { id: data.id };
 };
 
 export const getNotes = async (userId: string) => {
-  const querySnapshot = await getDocs(
-    collection(db, "notes", userId, "userNotes")
-  );
-  console.log(querySnapshot);
-  return querySnapshot.docs.map(
-    (doc) =>
-      ({
-        id: doc.id,
-        ...doc.data(),
-        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-      } as Note)
-  );
+  const { data, error } = await supabase
+    .from('notes')
+    .select('*')
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false });
+
+  if (error) throw error;
+
+  return data.map((note) => ({
+    id: note.id,
+    title: note.title,
+    content: note.content,
+    updatedAt: new Date(note.updated_at),
+    history: (note.history || []).map((entry: { timestamp: string; content: string }) => ({
+      timestamp: new Date(entry.timestamp),
+      content: entry.content,
+    })),
+  } as Note));
 };
 
 export const updateNote = async (
@@ -40,15 +49,40 @@ export const updateNote = async (
   noteId: string,
   updates: Partial<Note>
 ) => {
-  const noteRef = doc(db, "notes", userId, "userNotes", noteId);
-  await updateDoc(noteRef, {
-    ...updates,
-    updatedAt: serverTimestamp(),
-  });
+  const updateData: Record<string, any> = {
+    updated_at: new Date().toISOString(),
+  };
+
+  if (updates.title !== undefined) {
+    updateData.title = updates.title;
+  }
+
+  if (updates.content !== undefined) {
+    updateData.content = updates.content;
+  }
+
+  if (updates.history !== undefined) {
+    updateData.history = updates.history.map((entry) => ({
+      timestamp: entry.timestamp.toISOString(),
+      content: entry.content,
+    }));
+  }
+
+  const { error } = await supabase
+    .from('notes')
+    .update(updateData)
+    .eq('id', noteId)
+    .eq('user_id', userId);
+
+  if (error) throw error;
 };
 
 export const deleteNote = async (userId: string, noteId: string) => {
-  const noteRef = doc(db, "notes", userId, "userNotes", noteId);
-  logEvent(analytics, "notes_deleted", { noteId: noteId });
-  await deleteDoc(noteRef);
+  const { error } = await supabase
+    .from('notes')
+    .delete()
+    .eq('id', noteId)
+    .eq('user_id', userId);
+
+  if (error) throw error;
 };

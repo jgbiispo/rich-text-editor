@@ -15,7 +15,7 @@ i18n
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
-    ns: ["common", "editor"],
+    ns: ["common", "editor", "landing"],
     defaultNS: "common",
     detection: {
       order: ["localStorage", "navigator"],

@@ -1,17 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import {
-  AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY,
-  AuthErrorCode,
-} from "../authErrorCodes";
-import { analytics, provider } from "../firebase/config";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  getAuth,
-  signInWithPopup,
-  User,
-} from "firebase/auth";
-import { logEvent } from "firebase/analytics";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase } from '../supabase/client';
+import { User } from '@supabase/supabase-js';
 
 interface AuthContextType {
   user: User | null;
@@ -36,24 +25,39 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const auth = getAuth();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+    // Verificar sessão atual
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    return () => unsubscribe();
-  }, [auth]);
+    // Ouvir mudanças na auth
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const signInWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, provider);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+
+      if (error) throw error;
     } catch (error) {
-      console.error("Error signing in with Google:", error);
+      console.error('Error signing in with Google:', error);
       throw error;
     }
   };
@@ -69,23 +73,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }) => {
     try {
       if (password !== coPassword) {
-        throw new Error("PASSWORD_MISMATCH");
+        throw new Error('PASSWORD_MISMATCH');
       }
-      await createUserWithEmailAndPassword(auth, email, password).then(() => {
-        logEvent(analytics, "user_created", { email: email });
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
       });
+
+      if (error) throw error;
     } catch (error: any) {
-      if (error.message === "PASSWORD_MISMATCH") {
-        throw new Error("PASSWORD_MISMATCH");
+      if (error.message === 'PASSWORD_MISMATCH') {
+        throw new Error('PASSWORD_MISMATCH');
       }
 
-      const firebaseErrorCode = error.code;
-      const errorKey =
-        Object.entries(AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY).find(
-          ([, value]) => value === firebaseErrorCode
-        )?.[0] || "INTERNAL_ERROR";
-
-      throw new Error(errorKey);
+      throw error;
     }
   };
 
@@ -97,23 +99,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     password: string;
   }) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (error: any) {
-      const errorCode = error.code;
-      const errorKey =
-        (Object.entries(AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY).find(
-          ([, value]) => value === errorCode
-        )?.[0] as AuthErrorCode) || "INTERNAL_ERROR";
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      throw new Error(errorKey);
+      if (error) throw error;
+    } catch (error: any) {
+      throw error;
     }
   };
 
   const signOut = async () => {
     try {
-      await auth.signOut();
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
     } catch (err) {
-      console.error("Error signing out:", err);
+      console.error('Error signing out:', err);
       throw err;
     }
   };

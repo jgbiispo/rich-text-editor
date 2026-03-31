@@ -78,10 +78,10 @@ const Login = () => {
           {signiUp ? (
             <>
               <div className="form-group">
-                <label htmlFor="password">{t("login.confirm")}</label>
+                <label htmlFor="confirm-password">{t("login.confirm")}</label>
                 <input
                   type="password"
-                  id="password"
+                  id="confirm-password"
                   value={coPassword}
                   onChange={(e) => setCoPassword(e.target.value)}
                   required

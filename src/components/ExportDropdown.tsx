@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiDownload } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
+import { ExportFormat } from "../utils/exporters";
 
 interface ExportDropdownProps {
-  onExport: (format: string) => void;
+  onExport: (format: ExportFormat) => void;
 }
 
 const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport }) => {

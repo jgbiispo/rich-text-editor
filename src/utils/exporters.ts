@@ -1,5 +1,7 @@
 import TurndownService from 'turndown';
 
+export type ExportFormat = "html" | "md" | "txt";
+
 export const exportAsHTML = (content: string) => {
   return content;
 };

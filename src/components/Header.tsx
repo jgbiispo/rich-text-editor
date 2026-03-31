@@ -21,8 +21,8 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleTheme }) => {
           <h1>Richly</h1>
           {user ? (
             <p className="user">
-              Logado: {user!.displayName?.split(" ")[0]}{" "}
-              {user!.displayName?.split(" ")[1]}
+              Logado: {(user.user_metadata.full_name || user.email)?.split(" ")[0]}{" "}
+              {(user.user_metadata.full_name || user.email)?.split(" ")[1] || ""}
             </p>
           ) : (
             <></>

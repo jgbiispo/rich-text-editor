@@ -10,3 +10,8 @@ export interface Note {
   updatedAt: Date;
   history: NoteHistoryEntry[];
 }
+
+/** Note garantidamente persistida — id sempre presente após criação no Firestore */
+export interface CreatedNote extends Note {
+  id: string;
+}

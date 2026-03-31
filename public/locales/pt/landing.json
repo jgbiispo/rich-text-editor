@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "features": "Funcionalidades",
+    "pricing": "Planos",
+    "about": "Sobre"
+  },
+  "header": {
+    "login": "Entrar",
+    "get_started": "Começar agora"
+  },
+  "hero": {
+    "headline": "Escreva melhor, organize com mais inteligência.",
+    "subheadline": "Um poderoso editor de texto rico com sincronização na nuvem, histórico de versões e exportação em qualquer formato.",
+    "cta_primary": "Começar gratuitamente",
+    "cta_secondary": "Ver funcionalidades"
+  },
+  "features": {
+    "title": "Tudo que você precisa para escrever",
+    "subtitle": "O Richly combina um editor poderoso com ferramentas inteligentes para manter sua produtividade.",
+    "editor": {
+      "title": "Editor de Texto Rico",
+      "description": "Formate textos com negrito, itálico, títulos, tabelas e muito mais — em uma interface limpa e sem distrações."
+    },
+    "sync": {
+      "title": "Sincronização na Nuvem",
+      "description": "Acesse suas notas de qualquer dispositivo. Tudo é salvo automaticamente e sincronizado em tempo real."
+    },
+    "history": {
+      "title": "Histórico de Versões",
+      "description": "Nunca perca seu trabalho. Navegue e restaure versões anteriores de qualquer nota com um clique."
+    },
+    "export": {
+      "title": "Exporte para Qualquer Formato",
+      "description": "Baixe suas notas como HTML, Markdown ou texto simples — prontos para compartilhar ou publicar."
+    }
+  },
+  "benefits": {
+    "title": "Por que o Richly?",
+    "fast": "Extremamente rápido — salva enquanto você digita",
+    "secure": "Seguro — seus dados estão protegidos",
+    "dark_mode": "Modo escuro incluído",
+    "multilingual": "Disponível em múltiplos idiomas"
+  },
+  "pricing": {
+    "title": "Preços simples e transparentes",
+    "subtitle": "Escolha o plano que melhor se encaixa no seu fluxo de trabalho.",
+    "popular": "Mais popular",
+    "free": {
+      "name": "Grátis",
+      "features": {
+        "50_notes": "Até 50 notas",
+        "sync": "Sincronização na nuvem",
+        "basic_export": "Exportação básica (HTML, TXT)"
+      },
+      "cta": "Começar agora"
+    },
+    "pro": {
+      "name": "Pro",
+      "features": {
+        "unlimited": "Notas ilimitadas",
+        "full_history": "Histórico completo de versões",
+        "advanced_export": "Exportação avançada (Markdown)"
+      },
+      "cta": "Experimentar o Pro"
+    },
+    "enterprise": {
+      "name": "Empresarial",
+      "price": "Sob consulta",
+      "features": {
+        "api": "Acesso à API",
+        "sso": "SSO e gestão de equipes",
+        "support": "Suporte prioritário"
+      },
+      "cta": "Fale conosco"
+    }
+  },
+  "cta": {
+    "headline": "Pronto para escrever melhor?",
+    "subheadline": "Junte-se a milhares de pessoas que usam o Richly todos os dias.",
+    "button": "Começar gratuitamente"
+  },
+  "footer": {
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço",
+    "contact": "Contato",
+    "copyright": "© 2025 Richly. Todos os direitos reservados."
+  }
+}

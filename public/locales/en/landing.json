@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "about": "About"
+  },
+  "header": {
+    "login": "Log In",
+    "get_started": "Get Started"
+  },
+  "hero": {
+    "headline": "Write smarter, organize better.",
+    "subheadline": "A powerful rich text editor with cloud sync, version history, and export to any format.",
+    "cta_primary": "Start for free",
+    "cta_secondary": "See features"
+  },
+  "features": {
+    "title": "Everything you need to write",
+    "subtitle": "Richly combines a powerful editor with smart tools to keep you productive.",
+    "editor": {
+      "title": "Rich Text Editor",
+      "description": "Format text with bold, italic, headings, tables and more — all in a clean, distraction-free interface."
+    },
+    "sync": {
+      "title": "Cloud Sync",
+      "description": "Access your notes from any device. Everything is saved automatically and synced in real time."
+    },
+    "history": {
+      "title": "Version History",
+      "description": "Never lose your work. Browse and restore previous versions of any note with one click."
+    },
+    "export": {
+      "title": "Export Anywhere",
+      "description": "Download your notes as HTML, Markdown or plain text — ready to share or publish."
+    }
+  },
+  "benefits": {
+    "title": "Why Richly?",
+    "fast": "Blazing fast — saves as you type",
+    "secure": "Secure — your data is protected",
+    "dark_mode": "Dark mode included",
+    "multilingual": "Available in multiple languages"
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Choose the plan that fits your workflow.",
+    "popular": "Most popular",
+    "free": {
+      "name": "Free",
+      "features": {
+        "50_notes": "Up to 50 notes",
+        "sync": "Cloud sync",
+        "basic_export": "Basic export (HTML, TXT)"
+      },
+      "cta": "Get started"
+    },
+    "pro": {
+      "name": "Pro",
+      "features": {
+        "unlimited": "Unlimited notes",
+        "full_history": "Full version history",
+        "advanced_export": "Advanced export (Markdown)"
+      },
+      "cta": "Start Pro trial"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "Custom",
+      "features": {
+        "api": "API access",
+        "sso": "SSO & team management",
+        "support": "Priority support"
+      },
+      "cta": "Contact us"
+    }
+  },
+  "cta": {
+    "headline": "Ready to write better?",
+    "subheadline": "Join thousands of writers using Richly every day.",
+    "button": "Get started for free"
+  },
+  "footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact",
+    "copyright": "© 2025 Richly. All rights reserved."
+  }
+}

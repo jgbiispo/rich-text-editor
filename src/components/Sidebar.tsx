@@ -98,7 +98,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className="delete-btn"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (editedTitle !== note.id) {
+                      if (editingNoteId === note.id) {
+                        handleSaveTitle(note.id || "");
+                      } else {
                         onDeleteNote(note.id || "");
                       }
                     }}

@@ -7,10 +7,17 @@ export const useDebouncedSave = (
   saveAction: SaveAction,
   delay: number = 1000
 ) => {
+  // Ref separado para sempre ter a versão mais recente do callback
+  const saveActionRef = useRef<SaveAction>(saveAction);
+
+  useEffect(() => {
+    saveActionRef.current = saveAction;
+  }, [saveAction]);
+
   const debouncedSaveRef = useRef(
     debounce(async (content: string) => {
       try {
-        await saveAction(content);
+        await saveActionRef.current(content);
       } catch (error) {
         console.error("Save error:", error);
       }
